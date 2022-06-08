@@ -32,6 +32,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.openbravo.pos.ticket.TicketInfo;
 import java.io.IOException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 
@@ -55,6 +56,10 @@ public class StartPOS {
     }
 
     public static void main (final String args[]) {
+        
+        
+        // JOptionPane.showMessageDialog(null, "Mensaje", "Titulo", JOptionPane.INFORMATION_MESSAGE);
+                    
 
         SwingUtilities.invokeLater ( new Runnable () {       
 
@@ -89,7 +94,6 @@ public class StartPOS {
                 
                 // Set the look and feel.
                 try {             
-                    
                     Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();                   
                     
                     if (laf instanceof LookAndFeel){

@@ -1251,7 +1251,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
 
         m_jmargin.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m_jmargin.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        m_jmargin.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        m_jmargin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         m_jmargin.setEnabled(false);
         m_jmargin.setPreferredSize(new java.awt.Dimension(110, 30));
 
@@ -1295,6 +1295,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
 
         jLabel17.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel17.setText(AppLocal.getIntString("label.prodsupplier")); // NOI18N
+        jLabel17.setToolTipText("");
         jLabel17.setPreferredSize(new java.awt.Dimension(110, 30));
 
         m_jSupplier.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
