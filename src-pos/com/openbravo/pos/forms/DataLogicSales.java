@@ -132,7 +132,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field(AppLocal.getIntString("label.UOM"), Datas.STRING, Formats.STRING),                
 
                 new Field("ISCATALOG", Datas.BOOLEAN, Formats.BOOLEAN),
-                new Field("CATORDER", Datas.INT, Formats.INT)
+                new Field("CATORDER", Datas.INT, Formats.INT),
+                
+                new Field("DATEDUE", Datas.TIMESTAMP, Formats.DATE)
 
         );
         
@@ -253,7 +255,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "
-                + "UOM "
+                + "UOM, "
+                + "DATEDUE "
                 + "FROM products WHERE ID = ?"
 		, SerializerWriteString.INSTANCE
 		, ProductInfoExt.getSerializerRead()).find(id);
@@ -293,7 +296,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "
-                + "UOM "        
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products WHERE CODE = ?"
 		, SerializerWriteString.INSTANCE
 		, ProductInfoExt.getSerializerRead()).find(sCode);
@@ -332,7 +336,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "
-                + "UOM "        
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products "
                 + "WHERE SUBSTRING( CODE, 3, 6 ) = ?"                
             , SerializerWriteString.INSTANCE
@@ -379,7 +384,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "
-                + "UOM "        
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products "
                 + "WHERE LEFT( CODE, 7 ) = ? AND CODETYPE = 'UPC-A' "                
 //  selection of 7 digits ie: 2123456 specific to allow for other 12 digit
@@ -427,7 +433,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "
-                + "UOM "        
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products WHERE REFERENCE = ?"
 		, SerializerWriteString.INSTANCE
 		, ProductInfoExt.getSerializerRead()).find(sReference);
@@ -512,7 +519,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.STOCKUNITS, " 
                 + "P.PRINTTO, "
                 + "P.SUPPLIER, "        
-                + "P.UOM "
+                + "P.UOM, "
+                + "P.DATEDUE "
 		+ "FROM products P, products_cat O "
                 + "WHERE P.ID = O.PRODUCT AND P.CATEGORY = ? " 
                 + "ORDER BY O.CATORDER, P.NAME "                
@@ -557,7 +565,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.STOCKUNITS, " 
                 + "P.PRINTTO, "
                 + "P.SUPPLIER, "         
-                + "P.UOM "        
+                + "P.UOM, "
+                + "P.DATEDUE "
                 + "FROM products P, "
                 + "products_cat O, products_com M "
                 + "WHERE P.ID = O.PRODUCT AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
@@ -604,7 +613,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "products.STOCKUNITS, " 
                     + "products.PRINTTO, "
                     + "products.SUPPLIER, "
-                    + "products.UOM "
+                    + "products.UOM, "
+                    + "products.DATEDUE "
                 + "FROM categories INNER JOIN products ON (products.CATEGORY = categories.ID) "
                 + "WHERE products.ISCONSTANT = " +s.DB.TRUE()+ " "
                 + "ORDER BY categories.NAME, products.NAME", 
@@ -674,7 +684,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "            
-                + "UOM "
+                + "UOM, "
+                + "DATEDUE "
                 + "FROM products "
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE", 
@@ -724,7 +735,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "           
-                + "UOM "
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products "
                 + "WHERE ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) ORDER BY REFERENCE",
                 new String[] {"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"})
@@ -772,7 +784,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "          
-                + "UOM "
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products "
                 + "ORDER BY NAME"
                 , null
@@ -815,7 +828,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "STOCKUNITS, "
                 + "PRINTTO, "
                 + "SUPPLIER, "            
-                + "UOM "
+                + "UOM, "
+                + "DATEDUE "
 		+ "FROM products "
                 + "WHERE ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE", new String[] {"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"})
@@ -1862,13 +1876,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "P.STOCKUNITS, "
                     + "P.PRINTTO, "
                     + "P.SUPPLIER, "
-                    + "P.UOM, "                    
-                        + "CASE WHEN "
+                    + "P.UOM, "
+                    + "P.DATEDUE "
+                    /*    + "CASE WHEN "
                             + "C.PRODUCT IS NULL "
                             + "THEN " + s.DB.FALSE() 
                             + " ELSE " + s.DB.TRUE() 
                         + " END, "
-                    + "C.CATORDER "
+                    + "C.CATORDER "*/
                     + "FROM products P LEFT OUTER JOIN products_cat C "
                     + "ON P.ID = C.PRODUCT "
                     + "WHERE ?(QBF_FILTER) "
@@ -1924,27 +1939,28 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "STOCKUNITS, "
                     + "PRINTTO, "
                     + "SUPPLIER, "
-                    + "UOM ) "
+                    + "UOM, "
+                    + "DATEDUE )"    
                     + "VALUES ("
                     + "?, ?, ?, ?, ?, ?, "
                     + "?, ?, ?, ?, ?, ?, "
                     + "?, ?, ?, ?, ?, ?, "
                     + "?, ?, ?, ?, ?, ?, "
-                    + "?, ?, ?, ?, ?)"
+                    + "?, ?, ?, ?, ?, ?)"
 		, new SerializerWriteBasicExt(productsRow.getDatas(), 
                 new int[]{0, 
                     1, 2, 3, 4, 5, 6, 
                     7, 8, 9, 10, 11, 12, 
                     13, 14, 15, 16, 17, 18,
                     19, 20, 21, 22, 23, 24, 
-                    25, 26, 27, 28}))
+                    25, 26, 27, 28, 29}))
                     
                     .exec(params);
 
                 if (i > 0 && ((Boolean)values[29])) {
                     return new PreparedSentence(s
                     , "INSERT INTO products_cat (PRODUCT, CATORDER) VALUES (?, ?)"
-                    , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 30}))
+                    , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 31}))
                     
                     .exec(params);
                 } else {
@@ -1993,7 +2009,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "STOCKUNITS = ?, "
                         + "PRINTTO = ?, "
                         + "SUPPLIER = ?, "
-                        + "UOM = ? "
+                        + "UOM = ?, "
+                        + "DATEDUE = ? "
                     + "WHERE ID = ?"
 		, new SerializerWriteBasicExt(productsRow.getDatas(), 
                         new int[]{0, 
@@ -2002,17 +2019,18 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             11, 12, 13, 14, 15,
                             16, 17, 18, 19, 20, 
                             21, 22, 23, 24, 25, 
-                            26, 27, 28, 0}))
+                            26, 27, 28, 29, 0}))
                         .exec(params);
+                
             	if (i > 0) {
-                    if (((Boolean)values[29])) {
+                    if (((Boolean)values[28])) {
 			if (new PreparedSentence(s
                                 , "UPDATE products_cat SET CATORDER = ? WHERE PRODUCT = ?"
                                 , new SerializerWriteBasicExt(productsRow.getDatas()
-                                , new int[] {30, 0})).exec(params) == 0) {
+                                , new int[] {31, 0})).exec(params) == 0) {
                             new PreparedSentence(s
 				, "INSERT INTO products_cat (PRODUCT, CATORDER) VALUES (?, ?)"
-                                , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 30})).exec(params);
+                                , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 31})).exec(params);
                             }
 			} else {
                             new PreparedSentence(s

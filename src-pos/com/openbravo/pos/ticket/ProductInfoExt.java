@@ -24,6 +24,7 @@ import com.openbravo.data.loader.ImageUtils;
 import com.openbravo.data.loader.SerializerRead;
 import com.openbravo.format.Formats;
 import java.awt.image.BufferedImage;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -63,7 +64,8 @@ public class ProductInfoExt {
     public double m_dStockUnits;
     public String m_sPrinter;
     public String supplierid;
-    private String uomid;    
+    private String uomid;
+    public Date datedue;
 
     public ProductInfoExt() {
         m_ID = null;
@@ -94,14 +96,23 @@ public class ProductInfoExt {
         m_dStockUnits = 0.0;
         m_sPrinter = null;
         supplierid = "0";
-        uomid = "0";        
-
+        uomid = "0";
+        datedue = new Date();
     }
 
     /**
      *
      * @return
      */
+    
+    public final Date getDateDue() {
+        return datedue;
+    }
+    
+    public final void setDateDue(Date ddue) {
+        datedue = ddue;
+    }
+    
     public final String getID() {
         return m_ID;
     }
@@ -354,6 +365,7 @@ public class ProductInfoExt {
                 product.m_sPrinter = dr.getString(27);
                 product.supplierid = dr.getString(28);
                 product.uomid = dr.getString(29);
+                product.datedue = dr.getTimestamp(30);
 
                 return product;
             }

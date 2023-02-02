@@ -131,7 +131,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jAtt.addActionListener(dirty);
         m_jVerpatrib.addActionListener(dirty); 
         m_jTax.addActionListener(dirty);
-        m_jUom.addActionListener(dirty);        
+        m_jUom.addActionListener(dirty);
+        txtDateDue.addActionListener(dirty);
         m_jPriceBuy.getDocument().addDocumentListener(dirty);
         m_jPriceSell.getDocument().addDocumentListener(dirty);
         m_jPrintTo.addActionListener(dirty);
@@ -230,6 +231,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setText(null);
         m_jCodetype.setSelectedIndex(0);
         m_jName.setText(null);
+        txtDateDue.setText(null);
         m_CategoryModel.setSelectedKey(null);
         taxcatmodel.setSelectedKey(null);
         attmodel.setSelectedKey(null);
@@ -273,6 +275,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setEnabled(false);
         m_jCodetype.setEnabled(false);
         m_jName.setEnabled(false);
+        txtDateDue.setEnabled(false);
         m_jCategory.setEnabled(false);
         m_jAtt.setEnabled(false);
         m_jVerpatrib.setEnabled(false);  
@@ -329,6 +332,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setText(null);
         m_jCodetype.setSelectedIndex(0);
         m_jName.setText(null);
+        txtDateDue.setText(null);
         m_CategoryModel.setSelectedKey("000");
         attmodel.setSelectedKey(null);
         m_jVerpatrib.setSelected(false);                
@@ -370,6 +374,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setEnabled(true);
         m_jCodetype.setEnabled(true);
         m_jName.setEnabled(true);
+        txtDateDue.setEnabled(true);
         m_jCategory.setEnabled(true);
         m_jTax.setEnabled(true);
         m_jAtt.setEnabled(true);
@@ -419,7 +424,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
     @Override
     public Object createValue() throws BasicException {
 
-        Object[] myprod = new Object[31];        
+        Object[] myprod = new Object[32];        
 
         myprod[0] = m_oId == null ? UUID.randomUUID().toString() : m_oId;        
         myprod[1] = m_jRef.getText();
@@ -453,6 +458,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
 
         myprod[29] = m_jInCatalog.isSelected();
         myprod[30] = Formats.INT.parseValue(m_jCatalogOrder.getText());
+        
+        myprod[31] = Formats.DATE.parseValue(txtDateDue.getText());
 
         return myprod;        
     }
@@ -467,6 +474,9 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         reportlock = true;
         
         Object[] myprod = (Object[]) value;
+        
+        System.out.println("myprod 30 = " + myprod[30]);
+        System.out.println("myprod 31 = " + myprod[31]);
         
         m_jTitle.setText(Formats.STRING.formatValue(myprod[1]) 
                 + " - " + Formats.STRING.formatValue(myprod[4]));
@@ -504,6 +514,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jInCatalog.setSelected(((Boolean)myprod[29]));
         m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[30]));
         
+        txtDateDue.setText(Formats.DATE.formatValue(myprod[31]));
+        
         txtAttributes.setCaretPosition(0);
         reportlock = false;
 
@@ -521,7 +533,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSell.setEnabled(true);
         m_jPriceSellTax.setEnabled(true);
         m_jmargin.setEnabled(true);
-        m_jSupplier.setEnabled(true);        
+        m_jSupplier.setEnabled(true);
+        txtDateDue.setEnabled(true);
         
 // Tab Stock        
         m_jInCatalog.setEnabled(true);
@@ -604,6 +617,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         
         m_jInCatalog.setSelected(((Boolean)myprod[29]));
         m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[30]));
+        
+        txtDateDue.setText(Formats.DATE.formatValue(myprod[31]));
 
         txtAttributes.setCaretPosition(0);
         
@@ -624,6 +639,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSellTax.setEnabled(false);
         m_jmargin.setEnabled(false);
         m_jPrintTo.setEnabled(false);
+        txtDateDue.setEnabled(false);
         
 // Tab Stock
         m_jInCatalog.setEnabled(false);
@@ -2126,13 +2142,13 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
     private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
         Date date;
         try {
-            date = (Date) Formats.TIMESTAMP.parseValue(txtDateDue.getText());
+            date = (Date) Formats.DATE.parseValue(txtDateDue.getText());
         } catch (BasicException e) {
             date = null;
         }
         date = JCalendarDialog.showCalendarTime(this, date);
         if (date != null) {
-            txtDateDue.setText(Formats.TIMESTAMP.formatValue(date));
+            txtDateDue.setText(Formats.DATE.formatValue(date));
         }
         
     }//GEN-LAST:event_btnCalendarActionPerformed
