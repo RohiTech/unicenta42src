@@ -134,7 +134,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ISCATALOG", Datas.BOOLEAN, Formats.BOOLEAN),
                 new Field("CATORDER", Datas.INT, Formats.INT),
                 
-                new Field("DATEDUE", Datas.TIMESTAMP, Formats.DATE)
+                new Field("DATEDUE", Datas.TIMESTAMP, Formats.TIMESTAMP)
 
         );
         
@@ -695,7 +695,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     Datas.OBJECT, Datas.DOUBLE, 
                     Datas.OBJECT, Datas.DOUBLE, 
                     Datas.OBJECT, Datas.STRING, 
-                    Datas.OBJECT, Datas.STRING})
+                    Datas.OBJECT, Datas.STRING,
+                    Datas.TIMESTAMP})
 		, ProductInfoExt.getSerializerRead());
     }
     
@@ -745,7 +746,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     Datas.OBJECT, Datas.DOUBLE, 
                     Datas.OBJECT, Datas.DOUBLE, 
                     Datas.OBJECT, Datas.STRING, 
-                    Datas.OBJECT, Datas.STRING})
+                    Datas.OBJECT, Datas.STRING,
+                    Datas.TIMESTAMP})
 		, ProductInfoExt.getSerializerRead());
     }
 
@@ -838,7 +840,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     Datas.OBJECT, Datas.DOUBLE, 
                     Datas.OBJECT, Datas.DOUBLE, 
                     Datas.OBJECT, Datas.STRING, 
-                    Datas.OBJECT, Datas.STRING})
+                    Datas.OBJECT, Datas.STRING,
+                    Datas.TIMESTAMP})
 		, ProductInfoExt.getSerializerRead());
     }
 
@@ -1876,14 +1879,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "P.STOCKUNITS, "
                     + "P.PRINTTO, "
                     + "P.SUPPLIER, "
-                    + "P.UOM, "
-                    + "P.DATEDUE "
-                    /*    + "CASE WHEN "
+                    + "P.UOM, "                    
+                        + "CASE WHEN "
                             + "C.PRODUCT IS NULL "
                             + "THEN " + s.DB.FALSE() 
                             + " ELSE " + s.DB.TRUE() 
                         + " END, "
-                    + "C.CATORDER "*/
+                    + "C.CATORDER "
                     + "FROM products P LEFT OUTER JOIN products_cat C "
                     + "ON P.ID = C.PRODUCT "
                     + "WHERE ?(QBF_FILTER) "
@@ -1940,7 +1942,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "PRINTTO, "
                     + "SUPPLIER, "
                     + "UOM, "
-                    + "DATEDUE )"    
+                    + "DATEDUE )"
                     + "VALUES ("
                     + "?, ?, ?, ?, ?, ?, "
                     + "?, ?, ?, ?, ?, ?, "
@@ -1960,7 +1962,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 if (i > 0 && ((Boolean)values[29])) {
                     return new PreparedSentence(s
                     , "INSERT INTO products_cat (PRODUCT, CATORDER) VALUES (?, ?)"
-                    , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 31}))
+                    , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 30}))
                     
                     .exec(params);
                 } else {
@@ -2009,7 +2011,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "STOCKUNITS = ?, "
                         + "PRINTTO = ?, "
                         + "SUPPLIER = ?, "
-                        + "UOM = ?, "
+                        + "UOM = ? "
                         + "DATEDUE = ? "
                     + "WHERE ID = ?"
 		, new SerializerWriteBasicExt(productsRow.getDatas(), 
@@ -2021,9 +2023,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             21, 22, 23, 24, 25, 
                             26, 27, 28, 29, 0}))
                         .exec(params);
-                
             	if (i > 0) {
-                    if (((Boolean)values[28])) {
+                    if (((Boolean)values[30])) {
 			if (new PreparedSentence(s
                                 , "UPDATE products_cat SET CATORDER = ? WHERE PRODUCT = ?"
                                 , new SerializerWriteBasicExt(productsRow.getDatas()

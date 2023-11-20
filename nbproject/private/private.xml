@@ -5,13 +5,11 @@
         <group>
             <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/inventory/ProductsPanel.java</file>
             <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/forms/DataLogicSales.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-data/com/openbravo/data/user/BrowsableData.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/ticket/ProductInfoExt.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-data/com/openbravo/data/user/BrowsableEditableData.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-data/com/openbravo/data/user/ListProvider.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-data/com/openbravo/data/user/EditorRecord.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/inventory/TaxCategoriesEditor.java</file>
-            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/inventory/UomEditor.java</file>
+            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/ticket/ProductInfo.java</file>
+            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/epm/LeavesView.java</file>
+            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/epm/LeavesInfo.java</file>
+            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/epm/LeavesPanel.java</file>
+            <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/ticket/ProductInfoEdit.java</file>
             <file>file:/C:/Users/Lenovo/unicenta42src/src-pos/com/openbravo/pos/inventory/ProductsEditor.java</file>
         </group>
     </open-files>

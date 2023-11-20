@@ -132,7 +132,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jVerpatrib.addActionListener(dirty); 
         m_jTax.addActionListener(dirty);
         m_jUom.addActionListener(dirty);
-        txtDateDue.addActionListener(dirty);
         m_jPriceBuy.getDocument().addDocumentListener(dirty);
         m_jPriceSell.getDocument().addDocumentListener(dirty);
         m_jPrintTo.addActionListener(dirty);
@@ -172,8 +171,10 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSellTax.getDocument().addDocumentListener(new PriceTaxManager());
         m_jmargin.getDocument().addDocumentListener(new MarginManager());
         m_jGrossProfit.getDocument().addDocumentListener(new MarginManager());
+        
+        txtDateDue.getDocument().addDocumentListener(dirty);
        
-            init();
+        init();
     }
     
     private void init() {
@@ -231,7 +232,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setText(null);
         m_jCodetype.setSelectedIndex(0);
         m_jName.setText(null);
-        txtDateDue.setText(null);
         m_CategoryModel.setSelectedKey(null);
         taxcatmodel.setSelectedKey(null);
         attmodel.setSelectedKey(null);
@@ -239,7 +239,9 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_UomModel.setSelectedKey(0);        
         m_jPriceBuy.setText("0");
         setPriceSell(null);
-        m_SuppliersModel.setSelectedKey(0);               
+        m_SuppliersModel.setSelectedKey(0);    
+        
+        txtDateDue.setText(null);
         
 // Tab Stock        
         m_jInCatalog.setSelected(false);
@@ -332,7 +334,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setText(null);
         m_jCodetype.setSelectedIndex(0);
         m_jName.setText(null);
-        txtDateDue.setText(null);
         m_CategoryModel.setSelectedKey("000");
         attmodel.setSelectedKey(null);
         m_jVerpatrib.setSelected(false);                
@@ -341,7 +342,9 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceBuy.setText("0");
         setPriceSell(null);        
 //        m_SuppliersModel.setSelectedKey(0);
-        m_jSupplier.setSelectedIndex(selectedIndex);        
+        m_jSupplier.setSelectedIndex(selectedIndex);
+        
+        txtDateDue.setText(null);
         
 // Tab Stock        
         m_jInCatalog.setSelected(true);
@@ -374,7 +377,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jCode.setEnabled(true);
         m_jCodetype.setEnabled(true);
         m_jName.setEnabled(true);
-        txtDateDue.setEnabled(true);
         m_jCategory.setEnabled(true);
         m_jTax.setEnabled(true);
         m_jAtt.setEnabled(true);
@@ -384,7 +386,9 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSell.setEnabled(true);
         m_jPriceSellTax.setEnabled(true);
         m_jmargin.setEnabled(true);
-        m_jSupplier.setEnabled(true);        
+        m_jSupplier.setEnabled(true);
+        
+        txtDateDue.setEnabled(true);
 
 // Tab Stock        
         m_jInCatalog.setEnabled(true);
@@ -459,8 +463,13 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         myprod[29] = m_jInCatalog.isSelected();
         myprod[30] = Formats.INT.parseValue(m_jCatalogOrder.getText());
         
-        myprod[31] = Formats.DATE.parseValue(txtDateDue.getText());
-
+        myprod[31] = (Date) Formats.TIMESTAMP.parseValue(txtDateDue.getText());
+        
+         // Iterate through the array and print each element
+        for (Object element : myprod) {
+            System.out.println(element);
+        }
+        
         return myprod;        
     }
 
@@ -474,9 +483,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         reportlock = true;
         
         Object[] myprod = (Object[]) value;
-        
-        System.out.println("myprod 30 = " + myprod[30]);
-        System.out.println("myprod 31 = " + myprod[31]);
         
         m_jTitle.setText(Formats.STRING.formatValue(myprod[1]) 
                 + " - " + Formats.STRING.formatValue(myprod[4]));
@@ -514,7 +520,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jInCatalog.setSelected(((Boolean)myprod[29]));
         m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[30]));
         
-        txtDateDue.setText(Formats.DATE.formatValue(myprod[31]));
+        txtDateDue.setText(Formats.TIMESTAMP.formatValue((Date) myprod[31]));
         
         txtAttributes.setCaretPosition(0);
         reportlock = false;
@@ -534,7 +540,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSellTax.setEnabled(true);
         m_jmargin.setEnabled(true);
         m_jSupplier.setEnabled(true);
-        txtDateDue.setEnabled(true);
         
 // Tab Stock        
         m_jInCatalog.setEnabled(true);
@@ -558,6 +563,9 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jDisplay.setEnabled(true);
         m_jTextTip.setEnabled(true);
         colourChooser.setEnabled(true);
+        
+        txtDateDue.setEnabled(true);
+        
         setButtonHTML();
         
         resetTranxTable();     
@@ -565,7 +573,7 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
 
 // Tab Properties
         txtAttributes.setEnabled(true);
-
+        
         calculateMargin();
         calculatePriceSellTax();
         calculateGP();        
@@ -618,8 +626,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jInCatalog.setSelected(((Boolean)myprod[29]));
         m_jCatalogOrder.setText(Formats.INT.formatValue(myprod[30]));
         
-        txtDateDue.setText(Formats.DATE.formatValue(myprod[31]));
-
+        txtDateDue.setText(Formats.TIMESTAMP.formatValue((Date) myprod[31]));
+        
         txtAttributes.setCaretPosition(0);
         
         reportlock = false;
@@ -639,7 +647,6 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSellTax.setEnabled(false);
         m_jmargin.setEnabled(false);
         m_jPrintTo.setEnabled(false);
-        txtDateDue.setEnabled(false);
         
 // Tab Stock
         m_jInCatalog.setEnabled(false);
@@ -667,6 +674,8 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         
 // Tab Properties        
         txtAttributes.setEnabled(false);
+        
+        txtDateDue.setEnabled(false);
 
         calculateMargin();
         calculatePriceSellTax();
@@ -2142,15 +2151,14 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
     private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
         Date date;
         try {
-            date = (Date) Formats.DATE.parseValue(txtDateDue.getText());
+            date = (Date) Formats.TIMESTAMP.parseValue(txtDateDue.getText());
         } catch (BasicException e) {
             date = null;
         }
-        date = JCalendarDialog.showCalendarTime(this, date);
+        date = JCalendarDialog.showCalendarTimeHours(this, date);
         if (date != null) {
-            txtDateDue.setText(Formats.DATE.formatValue(date));
+            txtDateDue.setText(Formats.TIMESTAMP.formatValue(date));
         }
-        
     }//GEN-LAST:event_btnCalendarActionPerformed
 
     private void txtDateDueFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDateDueFocusLost

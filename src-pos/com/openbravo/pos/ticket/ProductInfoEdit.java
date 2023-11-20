@@ -63,7 +63,9 @@ public class ProductInfoEdit {
     protected Integer m_iCatalogOrder;
 
     protected String m_sSupplierID;     
-    protected String m_sUomID;     
+    protected String m_sUomID;
+    
+    protected String m_sDateDue;
     
     
     
@@ -100,6 +102,8 @@ public class ProductInfoEdit {
         
         m_sSupplierID = null;
         m_sUomID= null;
+        
+        m_sDateDue = null;
     }
    
     /**
@@ -161,7 +165,7 @@ public class ProductInfoEdit {
     public final void setTaxID(String sTaxID) {
         m_sTaxID = sTaxID;
     }
-
+    
     public final String getAttributeUseID() {
         return attributeuseid;
     }
@@ -188,6 +192,14 @@ public class ProductInfoEdit {
     }
     public void setImage(BufferedImage img) {
         m_Image = img;
+    }
+    
+    public String getM_sDateDue() {
+        return m_sDateDue;
+    }
+
+    public void setM_sDateDue(String m_sDateDue) {
+        this.m_sDateDue = m_sDateDue;
     }
     
     @Override
