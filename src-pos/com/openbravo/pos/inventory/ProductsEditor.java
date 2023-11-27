@@ -287,7 +287,9 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
         m_jPriceSell.setEnabled(false);
         m_jPriceSellTax.setEnabled(false);
         m_jmargin.setEnabled(false);
-        m_jSupplier.setEnabled(false);        
+        m_jSupplier.setEnabled(false);  
+        
+        txtDateDue.setEnabled(false);
         
 // Tab Stock        
         m_jInCatalog.setEnabled(false);

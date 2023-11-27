@@ -1883,9 +1883,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "CASE WHEN "
                             + "C.PRODUCT IS NULL "
                             + "THEN " + s.DB.FALSE() 
-                            + " ELSE " + s.DB.TRUE() 
+                            + " ELSE " + s.DB.FALSE()
                         + " END, "
-                    + "C.CATORDER "
+                    + "C.CATORDER, "
+                    + "'20231127' AS DATEDUE "
                     + "FROM products P LEFT OUTER JOIN products_cat C "
                     + "ON P.ID = C.PRODUCT "
                     + "WHERE ?(QBF_FILTER) "
