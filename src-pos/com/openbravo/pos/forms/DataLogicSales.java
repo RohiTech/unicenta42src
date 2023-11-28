@@ -256,7 +256,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
                 + "FROM products WHERE ID = ?"
 		, SerializerWriteString.INSTANCE
 		, ProductInfoExt.getSerializerRead()).find(id);
@@ -297,7 +297,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products WHERE CODE = ?"
 		, SerializerWriteString.INSTANCE
 		, ProductInfoExt.getSerializerRead()).find(sCode);
@@ -337,7 +337,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products "
                 + "WHERE SUBSTRING( CODE, 3, 6 ) = ?"                
             , SerializerWriteString.INSTANCE
@@ -385,7 +385,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products "
                 + "WHERE LEFT( CODE, 7 ) = ? AND CODETYPE = 'UPC-A' "                
 //  selection of 7 digits ie: 2123456 specific to allow for other 12 digit
@@ -434,7 +434,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products WHERE REFERENCE = ?"
 		, SerializerWriteString.INSTANCE
 		, ProductInfoExt.getSerializerRead()).find(sReference);
@@ -520,7 +520,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.PRINTTO, "
                 + "P.SUPPLIER, "        
                 + "P.UOM, "
-                + "P.DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(P.DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products P, products_cat O "
                 + "WHERE P.ID = O.PRODUCT AND P.CATEGORY = ? " 
                 + "ORDER BY O.CATORDER, P.NAME "                
@@ -566,7 +566,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "P.PRINTTO, "
                 + "P.SUPPLIER, "         
                 + "P.UOM, "
-                + "P.DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(P.DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
                 + "FROM products P, "
                 + "products_cat O, products_com M "
                 + "WHERE P.ID = O.PRODUCT AND P.ID = M.PRODUCT2 AND M.PRODUCT = ? "
@@ -614,7 +614,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "products.PRINTTO, "
                     + "products.SUPPLIER, "
                     + "products.UOM, "
-                    + "products.DATEDUE "
+                    + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(products.DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
                 + "FROM categories INNER JOIN products ON (products.CATEGORY = categories.ID) "
                 + "WHERE products.ISCONSTANT = " +s.DB.TRUE()+ " "
                 + "ORDER BY categories.NAME, products.NAME", 
@@ -685,7 +685,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "            
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
                 + "FROM products "
                 + "WHERE ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE", 
@@ -737,7 +737,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "           
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products "
                 + "WHERE ISCOM = " + s.DB.FALSE() + " AND ?(QBF_FILTER) ORDER BY REFERENCE",
                 new String[] {"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"})
@@ -787,7 +787,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "          
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products "
                 + "ORDER BY NAME"
                 , null
@@ -831,7 +831,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "PRINTTO, "
                 + "SUPPLIER, "            
                 + "UOM, "
-                + "DATEDUE "
+                + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
 		+ "FROM products "
                 + "WHERE ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) "
                 + "ORDER BY REFERENCE", new String[] {"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"})
