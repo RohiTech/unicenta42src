@@ -37,6 +37,7 @@ import com.openbravo.pos.ticket.*;
 import com.openbravo.pos.voucher.VoucherInfo;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -134,7 +135,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 new Field("ISCATALOG", Datas.BOOLEAN, Formats.BOOLEAN),
                 new Field("CATORDER", Datas.INT, Formats.INT),
                 
-                new Field("DATEDUE", Datas.TIMESTAMP, Formats.TIMESTAMP)
+                new Field("DATEDUE", Datas.TIMESTAMP, Formats.DATE)
 
         );
         
@@ -1886,7 +1887,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             + " ELSE " + s.DB.FALSE()
                         + " END, "
                     + "C.CATORDER, "
-                    + "'20231127' AS DATEDUE "
+                    + "CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(P.DATEDUE, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") AS DATEDUE "
                     + "FROM products P LEFT OUTER JOIN products_cat C "
                     + "ON P.ID = C.PRODUCT "
                     + "WHERE ?(QBF_FILTER) "
@@ -1912,6 +1913,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         @Override
 	public int execInTransaction(Object params) throws BasicException {
             Object[] values = (Object[]) params;
+            
+            // Obtén la fecha de values[31]
+            Date dateDue = (Date) values[31];
+
+            // Formatea la fecha a tu formato deseado
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            String formattedDateDue = dateFormat.format(dateDue);
+            
                 int i = new PreparedSentence(s
                 , "INSERT INTO products ("
                     + "ID, "
@@ -1949,14 +1958,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     + "?, ?, ?, ?, ?, ?, "
                     + "?, ?, ?, ?, ?, ?, "
                     + "?, ?, ?, ?, ?, ?, "
-                    + "?, ?, ?, ?, ?, ?)"
+                    + "?, ?, ?, ?, ?,'" + formattedDateDue + "')"
 		, new SerializerWriteBasicExt(productsRow.getDatas(), 
                 new int[]{0, 
                     1, 2, 3, 4, 5, 6, 
                     7, 8, 9, 10, 11, 12, 
                     13, 14, 15, 16, 17, 18,
                     19, 20, 21, 22, 23, 24, 
-                    25, 26, 27, 28, 29}))
+                    25, 26, 27, 28}))
                     
                     .exec(params);
 
@@ -1982,6 +1991,11 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         @Override
         public int execInTransaction(Object params) throws BasicException {
             Object[] values = (Object[]) params;
+            
+            for (Object value : values) {
+            System.out.println(value);
+        }
+            
 		int i = new PreparedSentence(s
                 , "UPDATE products SET "
                         + "ID = ?, "
@@ -2013,7 +2027,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "PRINTTO = ?, "
                         + "SUPPLIER = ?, "
                         + "UOM = ? "
-                        + "DATEDUE = ? "
+                        + "DATEDUE = CONCAT(\"'\", DATE_FORMAT(STR_TO_DATE(?, '%a %b %d %H:%i:%s CST %Y'), '%Y%m%d'), \"'\") "
                     + "WHERE ID = ?"
 		, new SerializerWriteBasicExt(productsRow.getDatas(), 
                         new int[]{0, 

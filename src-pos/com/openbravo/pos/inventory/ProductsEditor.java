@@ -2153,13 +2153,13 @@ public final class ProductsEditor extends javax.swing.JPanel implements EditorRe
     private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
         Date date;
         try {
-            date = (Date) Formats.TIMESTAMP.parseValue(txtDateDue.getText());
+            date = (Date) Formats.DATE.parseValue(txtDateDue.getText());
         } catch (BasicException e) {
             date = null;
         }
         date = JCalendarDialog.showCalendarTimeHours(this, date);
         if (date != null) {
-            txtDateDue.setText(Formats.TIMESTAMP.formatValue(date));
+            txtDateDue.setText(Formats.DATE.formatValue(date));
         }
     }//GEN-LAST:event_btnCalendarActionPerformed
 
