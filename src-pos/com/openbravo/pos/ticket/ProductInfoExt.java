@@ -65,7 +65,7 @@ public class ProductInfoExt {
     public String m_sPrinter;
     public String supplierid;
     private String uomid;
-    public Date datedue;
+    public String datedue;
 
     public ProductInfoExt() {
         m_ID = null;
@@ -97,7 +97,7 @@ public class ProductInfoExt {
         m_sPrinter = null;
         supplierid = "0";
         uomid = "0";
-        datedue = new Date();
+        datedue = null;
     }
 
     /**
@@ -105,11 +105,11 @@ public class ProductInfoExt {
      * @return
      */
     
-    public final Date getDateDue() {
+    public final String getDateDue() {
         return datedue;
     }
     
-    public final void setDateDue(Date ddue) {
+    public final void setDateDue(String ddue) {
         datedue = ddue;
     }
     
@@ -365,7 +365,7 @@ public class ProductInfoExt {
                 product.m_sPrinter = dr.getString(27);
                 product.supplierid = dr.getString(28);
                 product.uomid = dr.getString(29);
-                product.datedue = dr.getTimestamp(30);
+                product.datedue = dr.getString(30);
 
                 return product;
             }
