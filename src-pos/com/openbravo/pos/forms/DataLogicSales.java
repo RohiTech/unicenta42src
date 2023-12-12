@@ -1992,11 +1992,6 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         public int execInTransaction(Object params) throws BasicException {
             Object[] values = (Object[]) params;
             
-            System.out.println("values[28] = " + values[28]);
-            System.out.println("values[29] = " + values[29]);
-            System.out.println("values[30] = " + values[30]);
-            System.out.println("values[31] = " + values[31]);
-            
             // Obtén la fecha de values[31]
             Date dateDue = (Date) values[31];
 
@@ -2034,8 +2029,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         + "STOCKUNITS = ?, "
                         + "PRINTTO = ?, "
                         + "SUPPLIER = ?, "
-                        + "UOM = ? "
-                        + "DATEDUE = '" + formattedDateDue + "' "
+                        + "UOM = ?, "
+                        + "DATEDUE = '" + formattedDateDue + "'"
                     + "WHERE ID = ?"
 		, new SerializerWriteBasicExt(productsRow.getDatas(), 
                         new int[]{0, 
@@ -2044,17 +2039,17 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                             11, 12, 13, 14, 15,
                             16, 17, 18, 19, 20, 
                             21, 22, 23, 24, 25, 
-                            26, 27, 28, 29, 0}))
+                            26, 27, 28, 0}))
                         .exec(params);
             	if (i > 0) {
-                    if (((Boolean)values[30])) {
+                    if (((Boolean)values[29])) {
 			if (new PreparedSentence(s
                                 , "UPDATE products_cat SET CATORDER = ? WHERE PRODUCT = ?"
                                 , new SerializerWriteBasicExt(productsRow.getDatas()
-                                , new int[] {31, 0})).exec(params) == 0) {
+                                , new int[] {30, 0})).exec(params) == 0) {
                             new PreparedSentence(s
 				, "INSERT INTO products_cat (PRODUCT, CATORDER) VALUES (?, ?)"
-                                , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 31})).exec(params);
+                                , new SerializerWriteBasicExt(productsRow.getDatas(), new int[] {0, 30})).exec(params);
                             }
 			} else {
                             new PreparedSentence(s
