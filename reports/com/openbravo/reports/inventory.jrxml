@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2016-10-07T16:08:22 -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.2.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inventory" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="8a259928-5c00-4e6e-a40c-a8acf44d9e51">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
@@ -114,7 +113,7 @@
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.location}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Ubicación: "]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -142,7 +141,7 @@
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.supplier}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Proveedor"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -185,7 +184,7 @@
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.title.inventory}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Inventario: Ubicación y Categoría"]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
 				<reportElement key="rectangle-4" mode="Opaque" x="0" y="50" width="782" height="2" forecolor="#33CCFF" backcolor="#33CCFF" uuid="ffbe1ba7-be13-414a-8c3d-66accb80e7ab"/>
@@ -303,7 +302,7 @@
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.valuesell}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Total Venta"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="250" y="0" width="80" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="611c6539-b51f-491c-84a4-bfd08cf92dab"/>
@@ -317,7 +316,7 @@
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.pricebuy}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Precio Compra"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement key="line-5" mode="Opaque" x="0" y="18" width="782" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="fad443a5-8e7f-450b-998f-d259106ba5a0"/>
@@ -337,7 +336,7 @@
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.valuebuy}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Total Compra"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="413" y="0" width="80" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="062ccf5d-ff78-476d-a936-c8781dc3c2d2"/>
@@ -351,7 +350,7 @@
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.pricesell}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Precio Venta"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="200" y="0" width="50" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a9cf83a8-a15e-4431-9eeb-730845771d14"/>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.2.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inventoryb" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="135d2812-d4ba-4d9c-a46d-e579d97feb6f">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
@@ -62,7 +63,7 @@ ORDER BY CATEGORIES.NAME, products.NAME, stockcurrent.LOCATION]]>
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.location}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Ubicación: "]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="true">
 					<reportElement key="textField-4" mode="Transparent" x="82" y="0" width="160" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="20afe3c8-817b-443a-9038-7f6c82934c5a"/>
@@ -159,7 +160,7 @@ ORDER BY CATEGORIES.NAME, products.NAME, stockcurrent.LOCATION]]>
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.title.current}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Inventario: Actual"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="400" y="0" width="135" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="7a7b157a-c985-461a-81a5-31142de08fe2"/>

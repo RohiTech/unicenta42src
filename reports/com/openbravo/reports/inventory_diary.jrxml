@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.2.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suppliers_diary" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="5375a590-d290-4db2-95a1-6d6136385f72">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
@@ -53,28 +54,28 @@
 					<textElement verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.date}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Fecha"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField-7" x="452" y="22" width="130" height="15" uuid="7cfa98f0-2fc7-487c-aa9a-5498b795ebbd"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.product}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Producto"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField-9" x="582" y="22" width="40" height="15" uuid="65318727-b8a8-4819-87b7-3f0d09783e50"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.qty}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Cant."]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField-9" x="622" y="22" width="75" height="15" uuid="f26c91e3-42b9-4ad9-890f-78bd509306db"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.price}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Precio"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField-9" x="70" y="22" width="70" height="15" uuid="13b306e9-446d-457f-ba9c-8b7faab26076"/>
@@ -88,7 +89,7 @@
 					<textElement verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.reference}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Referencia"]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement key="line-3" mode="Opaque" x="0" y="38" width="781" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="bab72a5c-3ac7-4788-8aab-ba77a2ec1aa2"/>
@@ -101,21 +102,21 @@
 					<textElement verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.code}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Código"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField-9" x="140" y="22" width="130" height="15" uuid="85f90299-f2c8-4f9a-8bf6-6a0d89ab89c4"/>
 					<textElement verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.suppliername}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Proveedor"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
 					<reportElement key="textField-9" x="697" y="22" width="85" height="15" uuid="21186bac-efdd-4b95-a698-5900d2653515"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom">
 						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.totalP}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -207,7 +208,7 @@
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.title.diary}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Diario de Inventario"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-2" mode="Opaque" x="647" y="0" width="135" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="9a19c747-842a-4928-ba36-9baa448d56d7"/>
@@ -242,7 +243,7 @@
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.period}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Periodo: "]]></textFieldExpression>
 			</textField>
 			<rectangle radius="5">
 				<reportElement key="rectangle-1" mode="Opaque" x="0" y="50" width="782" height="2" forecolor="#33CCFF" backcolor="#33CCFF" uuid="ccb6fd38-2820-48fe-8655-1ac44d651b29"/>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.2.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inventorydiff" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="29" rightMargin="30" topMargin="20" bottomMargin="20" uuid="20b143c6-d28e-47c2-ae63-5a7ebe6e8201">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
@@ -237,7 +238,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.in}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Entrada"]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement key="textField-9" mode="Opaque" x="331" y="17" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="b77698ae-8496-4efb-afd6-845fb8b0439a"/>
@@ -251,7 +252,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.out}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Salida"]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="false">
 					<reportElement key="textField-9" mode="Opaque" x="436" y="17" width="100" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="0e70f9ac-75a5-4565-bc60-1bbb35109a5b"/>
@@ -265,7 +266,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{label.diff}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Diferencia"]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement key="line-1" mode="Opaque" x="0" y="33" width="535" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="bc75a444-5cd1-4850-8cb1-15300cbe7e3c"/>
@@ -398,7 +399,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.title.difference}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Inventario: Diferencia"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="400" y="0" width="135" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="4fa00731-0978-4e99-8e37-f2186f7c06ac"/>
@@ -433,7 +434,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.period}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Periodo: "]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
