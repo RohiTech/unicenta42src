@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.2.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="products" pageWidth="595" pageHeight="842" columnWidth="536" leftMargin="29" rightMargin="30" topMargin="20" bottomMargin="20" uuid="15170b66-0e75-4561-a8c9-6640a5effade">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
@@ -126,7 +127,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.pricebuy}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["P. Compra"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="443" y="5" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="cefc05bd-6bcf-440a-80b4-058d1796a4e6"/>
@@ -140,7 +141,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.pricegross}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Precio Neto"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="238" y="5" width="59" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a67d9cea-05bc-4b72-9914-e15812d93fda"/>
@@ -154,7 +155,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.units}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Cantidad"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="371" y="5" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6c325c82-1f2d-48fa-96d1-fd33d952a7e6"/>
@@ -168,7 +169,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.pricenet}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["P. Venta"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="76" y="5" width="161" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="9dd829ef-1f87-49de-8d02-0a16325bd474"/>
