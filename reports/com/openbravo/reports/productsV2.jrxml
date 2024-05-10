@@ -1,45 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 5.2.0  -->
+<!-- Created with Jaspersoft Studio version 6.21.0.final using JasperReports Library version 6.0.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="products" pageWidth="595" pageHeight="842" columnWidth="536" leftMargin="29" rightMargin="30" topMargin="20" bottomMargin="20" uuid="15170b66-0e75-4561-a8c9-6640a5effade">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="UnicentaPOS"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
-	<parameter name="TAXESLOGIC" class="com.openbravo.pos.sales.TaxesLogic" isForPrompting="false"/>
 	<queryString>
-		<![CDATA[SELECT 
-    products.ID, 
-    products.REFERENCE, 
-    products.CODE, 
-    products.NAME, 
-    products.PRICEBUY, 
-    products.PRICESELL, 
-    TC.ID AS TAXCAT, 
-    TC.NAME AS TAXCATNAME, 
-    categories.ID AS CATEGORY, 
-    categories.NAME AS CATEGORYNAME
-FROM products LEFT OUTER JOIN categories 
-        ON products.CATEGORY = categories.ID 
-    LEFT OUTER JOIN TAXcategories TC 
-        ON products.TAXCAT = TC.ID
-WHERE ?(QBF_FILTER)
-ORDER BY categories.NAME, products.NAME]]>
+		<![CDATA[
+select
+	case
+		when CURRENT_DATE() >= k.anticipo_vencimiento then
+			2
+		when CURRENT_DATE() >= k.fecha_vencimiento then
+			1
+	end as orden,
+	k.producto_id,
+	k.referencia,
+	k.codigo,
+	k.producto,
+	k.unidad,
+	k.categoria_id,
+	k.categoria,
+	k.fecha_vencimiento,
+	k.aviso_vencimiento,
+	k.anticipo_vencimiento,
+	case
+		when CURRENT_DATE() >= k.anticipo_vencimiento then
+			CONCAT('VENCE EN ', DATEDIFF(k.fecha_vencimiento, CURRENT_DATE()), ' DIAS')
+		when CURRENT_DATE() >= k.fecha_vencimiento then
+			'VENCIDO'
+	end as estado,
+	k.cantidad
+from
+(
+select
+	v.producto_id,
+	v.referencia,
+	v.codigo,
+	v.producto,
+	v.unidad,
+	v.categoria_id,
+	v.categoria,
+	v.fecha_vencimiento,
+	v.aviso_vencimiento,
+	DATE_ADD(v.fecha_vencimiento, INTERVAL (v.aviso_vencimiento * -1) DAY) as anticipo_vencimiento,
+	v.cantidad
+from
+(
+select
+	p.id as producto_id,
+  p.reference as referencia,
+  p.code as codigo,
+  p.name as producto,
+  u.name as unidad,
+  c.id as categoria_id,
+  c.name as categoria,
+	
+	(select
+		case
+			when a.name = 'FV(aaaa-mm-dd)' then
+				STR_TO_DATE(aa.value, '%Y-%m-%d')
+			else
+				null
+		end
+	from attributesetinstance ai
+		join attributeinstance aa
+		on ai.id = aa.attributesetinstance_id
+		join attribute a
+		on aa.attribute_id = a.id
+	where sd.attributesetinstance_id = ai.id
+		and a.name = 'FV(aaaa-mm-dd)') as fecha_vencimiento,
+	
+	(select
+		case
+			when a.name = 'Aviso FV(dias)' then
+				aa.value
+			else
+				0
+		end
+	from attributesetinstance ai
+		join attributeinstance aa
+		on ai.id = aa.attributesetinstance_id
+		join attribute a
+		on aa.attribute_id = a.id
+	where sd.attributesetinstance_id = ai.id
+		and a.name = 'Aviso FV(dias)') as aviso_vencimiento,
+		
+	sd.units as cantidad
+	
+from stockdiary sd
+	join products p
+	on sd.product = p.id
+	join uom u
+	on p.uom = u.id
+	left outer join categories c
+	on p.category = c.id
+where sd.reason = 1
+
+) as v
+) as k
+where ((CURRENT_DATE() >= k.anticipo_vencimiento) or
+(CURRENT_DATE() >= k.fecha_vencimiento))
+
+order by
+	1, 8, 5;
+
+]]>
 	</queryString>
-	<field name="CATEGORY" class="java.lang.String"/>
-	<field name="CATEGORYNAME" class="java.lang.String"/>
-	<field name="REFERENCE" class="java.lang.String"/>
-	<field name="NAME" class="java.lang.String"/>
-	<field name="UNITS" class="java.lang.Double"/>
-	<field name="PRICEBUY" class="java.lang.Double"/>
-	<field name="PRICESELL" class="java.lang.Double"/>
-	<field name="TAXCAT" class="java.lang.String"/>
-	<field name="TAXCATNAME" class="java.lang.String"/>
+	<field name="orden" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="orden"/>
+		<property name="com.jaspersoft.studio.field.label" value="orden"/>
+	</field>
+	<field name="producto_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="producto_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="producto_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="referencia" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="referencia"/>
+		<property name="com.jaspersoft.studio.field.label" value="referencia"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="codigo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="codigo"/>
+		<property name="com.jaspersoft.studio.field.label" value="codigo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="producto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="producto"/>
+		<property name="com.jaspersoft.studio.field.label" value="producto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="unidad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="unidad"/>
+		<property name="com.jaspersoft.studio.field.label" value="unidad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="categoria_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="categoria_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="categoria_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="categoria" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="categoria"/>
+		<property name="com.jaspersoft.studio.field.label" value="categoria"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="fecha_vencimiento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_vencimiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_vencimiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="aviso_vencimiento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="aviso_vencimiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="aviso_vencimiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="anticipo_vencimiento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="anticipo_vencimiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="anticipo_vencimiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="estado"/>
+	</field>
+	<field name="cantidad" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="cantidad"/>
+		<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
+	</field>
 	<group name="Categories">
-		<groupExpression><![CDATA[$F{CATEGORY}]]></groupExpression>
+		<groupExpression><![CDATA[$F{categoria_id}]]></groupExpression>
 		<groupHeader>
 			<band height="16">
 				<textField pattern="" isBlankWhenNull="true">
@@ -54,7 +192,7 @@ ORDER BY categories.NAME, products.NAME]]>
 						<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{CATEGORYNAME}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -88,7 +226,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.title}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CONTROL DEL VENCIMIENTO DE PRODUCTOS"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="false">
 				<reportElement key="textField" x="400" y="15" width="135" height="15" uuid="d35e49b4-8021-4c9c-84d4-3c1af409ba3d"/>
@@ -123,11 +261,11 @@ ORDER BY categories.NAME, products.NAME]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["P. Compra"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Vencimiento"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="443" y="5" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="cefc05bd-6bcf-440a-80b4-058d1796a4e6"/>
@@ -141,7 +279,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Precio Neto"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Estado"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="238" y="5" width="59" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="a67d9cea-05bc-4b72-9914-e15812d93fda"/>
@@ -151,11 +289,11 @@ ORDER BY categories.NAME, products.NAME]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Cantidad"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["UM"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="371" y="5" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="6c325c82-1f2d-48fa-96d1-fd33d952a7e6"/>
@@ -165,11 +303,11 @@ ORDER BY categories.NAME, products.NAME]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["P. Venta"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Cantidad"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="76" y="5" width="161" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="9dd829ef-1f87-49de-8d02-0a16325bd474"/>
@@ -183,7 +321,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nombre del Producto"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-9" mode="Opaque" x="2" y="5" width="74" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="cfcad692-8a7b-4780-9199-09a5b02862e4"/>
@@ -197,7 +335,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{label.ref}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Codigo"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement key="line-1" mode="Opaque" x="0" y="21" width="535" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="cea4c221-67c8-4763-8cee-1ac28c776314"/>
@@ -221,7 +359,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{REFERENCE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-2" mode="Transparent" x="75" y="0" width="161" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="f677036a-6257-4330-98b3-b29306acf5f0"/>
@@ -235,7 +373,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-2" mode="Transparent" x="237" y="0" width="59" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="d0aaa74e-7e6b-4641-8e9a-d98c8f25e4c5"/>
@@ -245,13 +383,13 @@ ORDER BY categories.NAME, products.NAME]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue($F{UNITS})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement key="textField-5" mode="Transparent" x="299" y="0" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="210bccc7-a8d0-4458-8bd3-d84060d71d11"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -259,13 +397,13 @@ ORDER BY categories.NAME, products.NAME]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($F{PRICEBUY})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fecha_vencimiento}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
+			<textField evaluationTime="Page" pattern="#,##0" isBlankWhenNull="true">
 				<reportElement key="textField-5" mode="Transparent" x="370" y="0" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="c7dd2d7b-04d8-471a-a083-c13bcaf00d32"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -273,11 +411,11 @@ ORDER BY categories.NAME, products.NAME]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($F{PRICESELL})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-5" mode="Transparent" x="442" y="0" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5e3585ba-39a2-4f1a-9484-de3f760668c5"/>
@@ -291,8 +429,7 @@ ORDER BY categories.NAME, products.NAME]]>
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(
-new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAXCAT}))))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -312,7 +449,7 @@ new Double($F{PRICESELL}.doubleValue() * (1.0 + $P{TAXESLOGIC}.getTaxRate($F{TAX
 				<textElement>
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
-				<text><![CDATA[rpt:products]]></text>
+				<text><![CDATA[rpt:productsV2]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-6" mode="Opaque" x="481" y="10" width="20" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="db1159e3-b2e0-4fef-937a-f363aa39095b"/>
