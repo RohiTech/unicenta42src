@@ -1556,7 +1556,7 @@ public final class JRViewer400 extends javax.swing.JPanel implements JRHyperlink
 		{
 			jasperPrint = (JasperPrint)JRLoader.loadObjectFromFile(fileName);
 		}
-
+                
 		refreshTabs();
 
 		type = TYPE_FILE_NAME;

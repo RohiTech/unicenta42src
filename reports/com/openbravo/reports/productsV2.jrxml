@@ -11,6 +11,12 @@
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="Style1" mode="Opaque" forecolor="#FF0000">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($F{estado}.equals("VENCIDO"))? true : false]]></conditionExpression>
+			<style mode="Opaque" forecolor="#FA130F"/>
+		</conditionalStyle>
+	</style>
 	<queryString>
 		<![CDATA[
 select
@@ -31,10 +37,13 @@ select
 	k.aviso_vencimiento,
 	k.anticipo_vencimiento,
 	case
-		when CURRENT_DATE() >= k.anticipo_vencimiento then
-			CONCAT('VENCE EN ', DATEDIFF(k.fecha_vencimiento, CURRENT_DATE()), ' DIAS')
 		when CURRENT_DATE() >= k.fecha_vencimiento then
 			'VENCIDO'
+		else
+			case
+				when CURRENT_DATE() >= k.anticipo_vencimiento then
+					CONCAT('VENCE EN ', DATEDIFF(k.fecha_vencimiento, CURRENT_DATE()), ' DIAS')
+			end
 	end as estado,
 	k.cantidad
 from
@@ -92,7 +101,7 @@ select
 	where sd.attributesetinstance_id = ai.id
 		and a.name = 'Aviso FV(dias)') as aviso_vencimiento,
 		
-	sd.units as cantidad
+	coalesce((select sum(sk.units) from stockdiary sk where sk.product = sd.product),0) as cantidad
 	
 from stockdiary sd
 	join products p
@@ -107,6 +116,7 @@ where sd.reason = 1
 ) as k
 where ((CURRENT_DATE() >= k.anticipo_vencimiento) or
 (CURRENT_DATE() >= k.fecha_vencimiento))
+and k.cantidad > 0
 
 order by
 	1, 8, 5;
@@ -152,7 +162,7 @@ order by
 		<property name="com.jaspersoft.studio.field.label" value="categoria"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
 	</field>
-	<field name="fecha_vencimiento" class="java.sql.Date">
+	<field name="fecha_vencimiento" class="java.util.Date">
 		<property name="com.jaspersoft.studio.field.name" value="fecha_vencimiento"/>
 		<property name="com.jaspersoft.studio.field.label" value="fecha_vencimiento"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
@@ -162,7 +172,7 @@ order by
 		<property name="com.jaspersoft.studio.field.label" value="aviso_vencimiento"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
 	</field>
-	<field name="anticipo_vencimiento" class="java.sql.Date">
+	<field name="anticipo_vencimiento" class="java.util.Date">
 		<property name="com.jaspersoft.studio.field.name" value="anticipo_vencimiento"/>
 		<property name="com.jaspersoft.studio.field.label" value="anticipo_vencimiento"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="*"/>
@@ -348,7 +358,7 @@ order by
 	<detail>
 		<band height="16">
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-1" mode="Transparent" x="0" y="0" width="75" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="ee678211-b20c-4494-9d60-15e266c2d7a2"/>
+				<reportElement key="textField-1" style="Style1" mode="Opaque" x="0" y="0" width="75" height="15" printWhenGroupChanges="Categories" forecolor="#000000" backcolor="#FFFFFF" uuid="ee678211-b20c-4494-9d60-15e266c2d7a2"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -362,7 +372,7 @@ order by
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-2" mode="Transparent" x="75" y="0" width="161" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="f677036a-6257-4330-98b3-b29306acf5f0"/>
+				<reportElement key="textField-2" style="Style1" mode="Opaque" x="75" y="0" width="161" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="f677036a-6257-4330-98b3-b29306acf5f0"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -376,7 +386,7 @@ order by
 				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-2" mode="Transparent" x="237" y="0" width="59" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="d0aaa74e-7e6b-4641-8e9a-d98c8f25e4c5"/>
+				<reportElement key="textField-2" style="Style1" mode="Opaque" x="237" y="0" width="59" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="d0aaa74e-7e6b-4641-8e9a-d98c8f25e4c5"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -390,7 +400,7 @@ order by
 				<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement key="textField-5" mode="Transparent" x="299" y="0" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="210bccc7-a8d0-4458-8bd3-d84060d71d11"/>
+				<reportElement key="textField-5" style="Style1" mode="Opaque" x="299" y="0" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="210bccc7-a8d0-4458-8bd3-d84060d71d11"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -403,8 +413,8 @@ order by
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_vencimiento}]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Page" pattern="#,##0" isBlankWhenNull="true">
-				<reportElement key="textField-5" mode="Transparent" x="370" y="0" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="c7dd2d7b-04d8-471a-a083-c13bcaf00d32"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement key="textField-5" style="Style1" mode="Opaque" x="370" y="0" width="70" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="c7dd2d7b-04d8-471a-a083-c13bcaf00d32"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -418,7 +428,7 @@ order by
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-5" mode="Transparent" x="442" y="0" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5e3585ba-39a2-4f1a-9484-de3f760668c5"/>
+				<reportElement key="textField-5" style="Style1" mode="Opaque" x="442" y="0" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="5e3585ba-39a2-4f1a-9484-de3f760668c5"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

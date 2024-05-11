@@ -23,50 +23,118 @@ report.setTitleKey("Menu.ProductsV2");
 report.setReport("/com/openbravo/reports/productsV2");
 report.setResourceBundle("com/openbravo/reports/products_messagesV2");
 
-report.setSentence("SELECT products.ID, "
-        + "products.REFERENCE, "
-        + "products.CODE, "
-        + "products.NAME, "
-        + "products.PRICEBUY, "
-        + "products.PRICESELL, "
-        + "TC.ID AS TAXCAT, "
-        + "TC.NAME AS TAXCATNAME, "
-        + "categories.ID AS CATEGORY, "
-        + "categories.NAME AS CATEGORYNAME, "
-        + "stockcurrent.UNITS "
-    + "FROM ((products products "
-        + "INNER JOIN stockcurrent stockcurrent "
-            + "ON (products.ID = stockcurrent.PRODUCT)) "
-        + "LEFT OUTER JOIN categories categories "
-           + "ON (products.CATEGORY = categories.ID)) "
-        + "LEFT OUTER JOIN taxcategories TC "
-           + "ON (products.TAXCAT = TC.ID) "
-    + "WHERE ?(QBF_FILTER) "
-    + "ORDER BY CATEGORYNAME ASC, products.NAME ASC");
+report.setSentence("select\n" +
+    "    case\n" +
+    "        when CURRENT_DATE() >= k.anticipo_vencimiento then\n" +
+    "            2\n" +
+    "        when CURRENT_DATE() >= k.fecha_vencimiento then\n" +
+    "            1\n" +
+    "    end as orden,\n" +
+    "    k.producto_id,\n" +
+    "    k.referencia,\n" +
+    "    k.codigo,\n" +
+    "    k.producto,\n" +
+    "    k.unidad,\n" +
+    "    k.categoria_id,\n" +
+    "    k.categoria,\n" +
+    "    k.fecha_vencimiento,\n" +
+    "    k.aviso_vencimiento,\n" +
+    "    k.anticipo_vencimiento,\n" +
+    "    case\n" +
+	"        when CURRENT_DATE() >= k.fecha_vencimiento then\n" +
+	"            'VENCIDO'\n" +
+	"        else\n" +
+	"    		case\n" +
+	"        		when CURRENT_DATE() >= k.anticipo_vencimiento then\n" +
+	"					CONCAT('VENCE EN ', DATEDIFF(k.fecha_vencimiento, CURRENT_DATE()), ' DIAS')\n" + 
+	"			end\n" + 
+    "    end as estado,\n" +
+    "    k.cantidad\n" +
+    "from\n" +
+    "    (\n" +
+    "        select\n" +
+    "            v.producto_id,\n" +
+    "            v.referencia,\n" +
+    "            v.codigo,\n" +
+    "            v.producto,\n" +
+    "            v.unidad,\n" +
+    "            v.categoria_id,\n" +
+    "            v.categoria,\n" +
+    "            v.fecha_vencimiento,\n" +
+    "            v.aviso_vencimiento,\n" +
+    "            DATE_ADD(v.fecha_vencimiento, INTERVAL (v.aviso_vencimiento * -1) DAY) as anticipo_vencimiento,\n" +
+    "            v.cantidad\n" +
+    "        from\n" +
+    "            (\n" +
+    "                select\n" +
+    "                    p.id as producto_id,\n" +
+    "                    p.reference as referencia,\n" +
+    "                    p.code as codigo,\n" +
+    "                    p.name as producto,\n" +
+    "                    u.name as unidad,\n" +
+    "                    c.id as categoria_id,\n" +
+    "                    c.name as categoria,\n" +
+    "                    (\n" +
+    "                        select\n" +
+    "                            case\n" +
+    "                                when a.name = 'FV(aaaa-mm-dd)' then\n" +
+    "                                    STR_TO_DATE(aa.value, '%Y-%m-%d')\n" +
+    "                                else\n" +
+    "                                    null\n" +
+    "                            end\n" +
+    "                        from attributesetinstance ai\n" +
+    "                            join attributeinstance aa\n" +
+    "                            on ai.id = aa.attributesetinstance_id\n" +
+    "                            join attribute a\n" +
+    "                            on aa.attribute_id = a.id\n" +
+    "                        where sd.attributesetinstance_id = ai.id\n" +
+    "                            and a.name = 'FV(aaaa-mm-dd)'\n" +
+    "                    ) as fecha_vencimiento,\n" +
+    "                    (\n" +
+    "                        select\n" +
+    "                            case\n" +
+    "                                when a.name = 'Aviso FV(dias)' then\n" +
+    "                                    aa.value\n" +
+    "                                else\n" +
+    "                                    0\n" +
+    "                            end\n" +
+    "                        from attributesetinstance ai\n" +
+    "                            join attributeinstance aa\n" +
+    "                            on ai.id = aa.attributesetinstance_id\n" +
+    "                            join attribute a\n" +
+    "                            on aa.attribute_id = a.id\n" +
+    "                        where sd.attributesetinstance_id = ai.id\n" +
+    "                            and a.name = 'Aviso FV(dias)'\n" +
+    "                    ) as aviso_vencimiento,\n" +
+    "                    coalesce((select sum(sk.units) from stockdiary sk where sk.product = sd.product),0) as cantidad\n" +
+    "                from stockdiary sd\n" +
+    "                    join products p\n" +
+    "                    on sd.product = p.id\n" +
+    "                    join uom u\n" +
+    "                    on p.uom = u.id\n" +
+    "                    left outer join categories c\n" +
+    "                    on p.category = c.id\n" +
+    "                where sd.reason = 1\n" +
+    "            ) as v\n" +
+    "    ) as k\n" +
+    "where ((CURRENT_DATE() >= k.anticipo_vencimiento) or\n" +
+    "    (CURRENT_DATE() >= k.fecha_vencimiento))\n" +
+	"    and k.cantidad > 0\n" +
+    "order by\n" +
+    "    1, 8, 5;");
 
-report.addParameter("products.NAME");
-report.addParameter("products.CATEGORY");
-report.addParameter("products.CODE");
-report.addParameter("stockcurrent.UNITS");
-report.addQBFFilter(new com.openbravo.pos.ticket.ProductFilter5());
-
-// report.addParameter("suppliers.ID");
-// report.addParameter("suppliers.NAME");
-// report.addQBFFilter(new com.openbravo.pos.reports.JParamsSuppliers());
-
-report.addParameter("stockcurrent.LOCATION");
-report.addQBFFilter(new com.openbravo.pos.reports.JParamsLocationWithFirst());
-
-report.addField("ID", com.openbravo.data.loader.Datas.STRING);
-report.addField("REFERENCE", com.openbravo.data.loader.Datas.STRING);
-report.addField("CODE", com.openbravo.data.loader.Datas.STRING);
-report.addField("NAME", com.openbravo.data.loader.Datas.STRING);
-report.addField("PRICEBUY", com.openbravo.data.loader.Datas.DOUBLE);
-report.addField("PRICESELL", com.openbravo.data.loader.Datas.DOUBLE);
-report.addField("TAXCAT", com.openbravo.data.loader.Datas.STRING);
-report.addField("TAXCATNAME", com.openbravo.data.loader.Datas.STRING);
-report.addField("CATEGORY", com.openbravo.data.loader.Datas.STRING);
-report.addField("CATEGORYNAME", com.openbravo.data.loader.Datas.STRING);
-report.addField("UNITS", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("orden", com.openbravo.data.loader.Datas.INT);
+report.addField("producto_id", com.openbravo.data.loader.Datas.STRING);
+report.addField("referencia", com.openbravo.data.loader.Datas.STRING);
+report.addField("codigo", com.openbravo.data.loader.Datas.STRING);
+report.addField("producto", com.openbravo.data.loader.Datas.STRING);
+report.addField("unidad", com.openbravo.data.loader.Datas.STRING);
+report.addField("categoria_id", com.openbravo.data.loader.Datas.STRING);
+report.addField("categoria", com.openbravo.data.loader.Datas.STRING);
+report.addField("fecha_vencimiento", com.openbravo.data.loader.Datas.TIMESTAMP);
+report.addField("aviso_vencimiento", com.openbravo.data.loader.Datas.STRING);
+report.addField("anticipo_vencimiento", com.openbravo.data.loader.Datas.TIMESTAMP);
+report.addField("estado", com.openbravo.data.loader.Datas.STRING);
+report.addField("cantidad", com.openbravo.data.loader.Datas.DOUBLE);
 
 report;

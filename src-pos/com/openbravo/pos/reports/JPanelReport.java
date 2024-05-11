@@ -212,6 +212,8 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
         
         m_App.waitCursorBegin();
         
+        System.out.println(jr.getName());
+        
         if (jr != null) {
             try {     
                 
